@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Haqida</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Detail sahifasi uchun maxsus qo'shimcha dizayn */
+        .detail-body { background: #000; min-height: 100vh; color: white; font-family: sans-serif; }
+        .hero-banner {
+            position: relative;
+            width: 100%;
+            height: 400px;
+        }
+        .hero-banner img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-gradient {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 70%;
+            background: linear-gradient(to top, #000, transparent);
+        }
+        .back-circle {
+            position: absolute;
+            top: 20px; left: 20px;
+            width: 40px; height: 40px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; z-index: 10;
+            cursor: pointer;
+        }
+        .info-container { padding: 0 20px 100px; margin-top: -50px; position: relative; }
+        .v-title { font-size: 28px; font-weight: bold; margin-bottom: 10px; }
+        .v-meta { display: flex; gap: 10px; color: #ccc; font-size: 13px; margin-bottom: 20px; }
+        .v-meta span { background: #222; padding: 4px 8px; border-radius: 4px; }
+        
+        .play-huge-btn {
+            background: #e50914; /* Standart qizil rang, sening o'zgaruvching bo'lsa o'zgartirishing mumkin */
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+            border: none;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .v-desc { color: #ccc; line-height: 1.6; font-size: 14px; }
+    </style>
+</head>
+<body class="detail-body">
+
+    <div id="detail-card-content">
+        </div>
+
+    <script>
+        window.onload = function() {
+            const item = JSON.parse(localStorage.getItem('currentVideo'));
+            const container = document.getElementById('detail-card-content');
+
+            if (!item) {
+                container.innerHTML = "<p style='color:white; text-align:center; margin-top:50px;'>Ma'lumot topilmadi.</p>";
+                return;
+            }
+
+            // Muhim qism: Player endi 'player' papkasi ichida joylashgan
+            // Va poster (thumbnail) ham qo'shib yuboriladi
+            const playerPath = "player/player.html";
+            const videoLink = encodeURIComponent(item.url);
+            const posterLink = encodeURIComponent(item.thumb);
+            const titleText = encodeURIComponent(item.title);
+
+            container.innerHTML = `
+                <div class="hero-banner">
+                    <div class="back-circle" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <img src="${item.thumb}" onerror="this.src='https://via.placeholder.com/400x600?text=Rasm+Mavjud+Emas'">
+                    <div class="hero-gradient"></div>
+                </div>
+
+                <div class="info-container">
+                    <h1 class="v-title">${item.title}</h1>
+                    <div class="v-meta">
+                        <span>${item.year || ""}</span>
+                        <span>${item.genre || ""}</span>
+                        <span>${item.lang || ""}</span>
+                    </div>
+
+                    <a href="${playerPath}?url=${videoLink}&poster=${posterLink}&title=${titleText}" class="play-huge-btn">
+                        <i class="fas fa-play"></i> TOMOSHA QILISH
+                    </a>
+
+                    <div class="v-desc">
+                        <p>${item.desc || "Ushbu video haqida hozircha batafsil ma'lumot berilmagan."}</p>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

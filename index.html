@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Video Portal | Azizbek</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Yuklanmoqda...</p>
+    </div>
+
+    <div id="app-content" style="opacity: 0;">
+        
+        <header class="main-header">
+            <div class="logo">Video<span>Portal</span></div>
+            <div class="header-icons">
+                <i class="fas fa-bell"></i>
+            </div>
+        </header>
+
+        <main id="v-home" class="view active">
+            <div id="story-container" class="stories-wrapper"></div>
+            
+            <div id="main-content-area"></div>
+        </main>
+
+        <section id="v-kategoriya" class="view">
+            <h2 class="page-title">Kategoriyalar</h2>
+            <div id="cat-grid-list" class="category-grid">
+                </div>
+        </section>
+
+        <section id="v-qidiruv" class="view">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Kino yoki janr qidiring..." oninput="doSearch()">
+                <i class="fas fa-search"></i>
+            </div>
+            <div id="search-results" class="results-container">
+                <p class="search-hint">Nimadir topamizmi?</p>
+            </div>
+        </section>
+
+        <section id="v-profil" class="view">
+            <div class="profile-header">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3>Azizbek</h3>
+                <p>Premium Foydalanuvchi</p>
+            </div>
+            <div class="profile-menu">
+                <div class="menu-item"><i class="fas fa-heart"></i> Saralanganlar</div>
+                <div class="menu-item"><i class="fas fa-history"></i> Ko'rishlar tarixi</div>
+                <div class="menu-item"><i class="fas fa-gear"></i> Sozlamalar</div>
+                <div class="menu-item exit"><i class="fas fa-right-from-bracket"></i> Chiqish</div>
+            </div>
+        </section>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="switchTab('home')">
+                <i class="fas fa-home"></i>
+                <span>Asosiy</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('kategoriya')">
+                <i class="fas fa-th-large"></i>
+                <span>Kategoriya</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('qidiruv')">
+                <i class="fas fa-search"></i>
+                <span>Qidiruv</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('profil')">
+                <i class="fas fa-user"></i>
+                <span>Profil</span>
+            </div>
+        </nav>
+    </div>
+
+    <div id="cat-overlay" class="cat-sheet">
+        <div class="sheet-header">
+            <div class="sheet-drag-handle"></div>
+            <div class="header-top">
+                <h2 id="cat-title">Kategoriya</h2>
+                <button class="close-sheet" onclick="closeCatSheet()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div id="cat-list-content" class="cat-list-wrapper"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
