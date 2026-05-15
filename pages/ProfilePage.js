@@ -14,7 +14,7 @@ class ProfilePage {
             <div class="profile-header">
                 <div class="profile-avatar">V</div>
                 <h1 class="profile-name">Mehmon</h1>
-                <p class="profile-email">videoflix@guest.com</p>
+                <p class="profile-email">azikk1999@gmail.com</p>
             </div>
             
             <div class="profile-stats">
