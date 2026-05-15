@@ -39,21 +39,36 @@ class HomePage {
     }
 
     _buildHTML() {
-        const featured = SheetsAPI.getFeatured(this.videos, 5);
-        const trending = SheetsAPI.getTrending(this.videos, 10);
-        const continueWatching = Storage.getContinueWatching().slice(0, 10);
-        const sections = SheetsAPI.groupBySection(this.videos);
-        const genres = SheetsAPI.getGenres(this.videos);
+    const featured = SheetsAPI.getFeatured(this.videos, 5);
+    const continueWatching = Storage.getContinueWatching().slice(0, 10);
+    const sections = SheetsAPI.groupBySection(this.videos);
+    const genres = SheetsAPI.getGenres(this.videos);
 
-        return `
-            ${this._buildHero(featured)}
-            ${this._buildCategoryChips(genres)}
-            ${continueWatching.length > 0 ? this._buildContinueWatching(continueWatching) : ''}
-            ${this._buildTrending(trending)}
-            ${sections.map(s => VideoCard.buildSection(s)).join('')}
-            <div style="height: 24px"></div>
-        `;
-    }
+    // 1. Google Sheets-dan "Top Reyting" bo'limini qidirib topamiz
+    const topRatingSection = sections.find(s => s.name === "Top Reyting");
+
+    return `
+        ${topRatingSection ? VideoCard.buildSection({...topRatingSection, type: 'story'}) : ''}
+
+        ${this._buildHero(featured)}
+        
+        ${this._buildCategoryChips(genres)}
+        
+        ${continueWatching.length > 0 ? this._buildContinueWatching(continueWatching) : ''}
+        
+        ${this._buildTrending(SheetsAPI.getTrending(this.videos, 10))}
+        
+        ${sections.map(s => {
+            // "Top Reyting" tepada chiqqani uchun bu yerda qayta chiqarmaymiz
+            if (s.name === "Top Reyting") return '';
+            return VideoCard.buildSection(s);
+        }).join('')}
+        
+        <div style="height: 24px"></div>
+    `;
+}
+
+
 
     _buildHero(featured) {
         if (featured.length === 0) return '';
