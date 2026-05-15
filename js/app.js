@@ -172,35 +172,60 @@ class App {
         updateStatus();
     }
 
-    _setupPullRefresh() {
+                _setupPullRefresh() {
         const main = document.getElementById('main-content');
         const indicator = document.getElementById('pull-refresh');
         
+        // Skrol qayerdaligini aniqlash uchun yordamchi funksiya
+        const getScrollTop = () => {
+            return main.scrollTop || window.pageYOffset || document.documentElement.scrollTop || 0;
+        };
+
         main.addEventListener('touchstart', (e) => {
-            if (main.scrollTop === 0) {
+            const st = getScrollTop();
+            if (st <= 5) { // Juda kichik chegara qo'yamiz
                 this.pullStart = e.touches[0].clientY;
-                this.pullDelta = 0;
             } else {
                 this.pullStart = 0;
             }
+            this.pullDelta = 0;
         }, { passive: true });
         
         main.addEventListener('touchmove', (e) => {
-            if (this.pullStart === 0) return;
-            this.pullDelta = e.touches[0].clientY - this.pullStart;
-            if (this.pullDelta > 60 && this.pullDelta < 200) {
+            const st = getScrollTop();
+            const currentY = e.touches[0].clientY;
+            const diff = currentY - this.pullStart;
+
+            // AGAR: 
+            // 1. pullStart nol bo'lsa (tepada emasdik)
+            // 2. Skrol tepada bo'lmasa (st > 5)
+            // 3. Tepaga qarab surayotgan bo'lsak (diff < 0)
+            // HAMMASINI TO'XTATAMIZ
+            if (this.pullStart === 0 || st > 5 || diff < 0) {
+                this.pullStart = 0;
+                this.pullDelta = 0;
+                indicator.classList.remove('active');
+                return;
+            }
+
+            this.pullDelta = diff;
+
+            if (this.pullDelta > 70) {
                 indicator.classList.add('active');
+            } else {
+                indicator.classList.remove('active');
             }
         }, { passive: true });
         
         main.addEventListener('touchend', () => {
-            if (this.pullDelta > 80) {
+            const st = getScrollTop();
+            if (st <= 5 && this.pullDelta > 90) {
                 indicator.classList.add('active');
                 Toast.info('Yangilanmoqda...');
                 setTimeout(() => {
                     indicator.classList.remove('active');
                     Router._handleRoute();
-                }, 1000);
+                }, 800);
             } else {
                 indicator.classList.remove('active');
             }
@@ -208,6 +233,9 @@ class App {
             this.pullDelta = 0;
         });
     }
+
+
+
 
     _setupHeaderScroll() {
         const header = document.getElementById('app-header');
